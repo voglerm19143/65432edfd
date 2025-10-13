@@ -185,8 +185,8 @@ func NewSeleniumService(jarPath string, port int, opts ...ServiceOption) (*Servi
 		classpath = append(classpath, s.htmlUnitPath)
 	}
 	classpath = append(classpath, jarPath)
-	s.cmd.Args = append(s.cmd.Args, "-cp", strings.Join(classpath, ":"))
-	s.cmd.Args = append(s.cmd.Args, "org.openqa.grid.selenium.GridLauncherV3", "-port", strconv.Itoa(port), "-debug")
+	s.cmd.Args = append(s.cmd.Args, "-jar", strings.Join(classpath, ":"))
+	s.cmd.Args = append(s.cmd.Args, "standalone", "--port", strconv.Itoa(port))
 
 	if err := s.start(port); err != nil {
 		return nil, err
@@ -247,7 +247,9 @@ func newService(cmd *exec.Cmd, urlPrefix string, port int, opts ...ServiceOption
 }
 
 func (s *Service) start(port int) error {
+	fmt.Println(fmt.Sprintf("executing: %s", s.cmd.String()))
 	if err := s.cmd.Start(); err != nil {
+		debugLog("error starting service: %v", err)
 		return err
 	}
 
