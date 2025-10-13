@@ -1,17 +1,15 @@
-# The most complete, best-tested WebDriver client for Go
+# The most complete, best-tested WebDriver client for Go (Fork of tebeka/selenium)
 
-[![GoDoc](https://godoc.org/github.com/tebeka/selenium?status.svg)](https://godoc.org/github.com/tebeka/selenium)
-[![Travis](https://travis-ci.org/tebeka/selenium.svg?branch=master)](https://travis-ci.org/tebeka/selenium)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tebeka/selenium)](https://goreportcard.com/report/github.com/tebeka/selenium)
+[![GoDoc](https://godoc.org/github.com/TelefonicaTC2Tech/selenium?status.svg)](https://godoc.org/github.com/TelefonicaTC2Tech/selenium)
+[![Travis](https://travis-ci.org/TelefonicaTC2Tech/selenium.svg?branch=master)](https://travis-ci.org/TelefonicaTC2Tech/selenium)
+[![Go Report Card](https://goreportcard.com/badge/github.com/TelefonicaTC2Tech/selenium)](https://goreportcard.com/report/github.com/TelefonicaTC2Tech/selenium)
 
 ## About
 
-This is a [WebDriver][selenium] client for [Go][go]. It supports the
-[WebDriver protocol][webdriver] and has been tested with various versions of
-[Selenium WebDriver][selenium], Firefox and [Geckodriver][geckodriver], and
-Chrome and [ChromeDriver][chromedriver],
+This is a fork of the [tebeka/selenium](https://github.com/tebeka/selenium) WebDriver client for [Go][go]. The main purpose of this fork is to update the library to be compatible with **Selenium 4**.
 
-`selenium` is currently maintained by Eric Garrido ([@minusnine][minusnine]).
+This client supports the [WebDriver protocol][webdriver] and has been tested with various versions of [Selenium WebDriver][selenium], Firefox and [Geckodriver][geckodriver], and
+Chrome and [ChromeDriver][chromedriver].
 
 [selenium]: http://seleniumhq.org/
 [webdriver]: https://www.w3.org/TR/webdriver/
@@ -25,7 +23,7 @@ Chrome and [ChromeDriver][chromedriver],
 
 Run
 
-    go get -t -d github.com/tebeka/selenium
+    go get -t -d github.com/TelefonicaTC2Tech/selenium
 
 to fetch the package.
 
@@ -46,7 +44,7 @@ Re-run this periodically to get up-to-date versions of these binaries.
 
 ## Documentation
 
-The API documentation is at https://godoc.org/github.com/tebeka/selenium. See [the example](https://github.com/tebeka/selenium/blob/master/example_test.go) and unit tests(for [sauce](https://github.com/tebeka/selenium/blob/master/sauce_test.go), [selenium](https://github.com/tebeka/selenium/blob/master/selenium_test.go) and [service](https://github.com/tebeka/selenium/blob/master/service_test.go)) for better usage information.
+The API documentation is at https://godoc.org/github.com/TelefonicaTC2Tech/selenium. See [the example](https://github.com/TelefonicaTC2Tech/selenium/blob/master/example_test.go) and unit tests(for [sauce](https://github.com/TelefonicaTC2Tech/selenium/blob/master/sauce_test.go), [selenium](https://github.com/TelefonicaTC2Tech/selenium/blob/master/selenium_test.go) and [service](https://github.com/TelefonicaTC2Tech/selenium/blob/master/service_test.go)) for better usage information.
 
 ## Known Issues
 
@@ -58,18 +56,10 @@ intervention.
 Please feel free to [file an issue][issue] if this client doesn't work as
 expected.
 
-[issue]: https://github.com/tebeka/selenium/issues/new
+[issue]: https://github.com/TelefonicaTC2Tech/selenium/issues/new
 
 Below are known issues that affect the usage of this API. There are likely
 others filed on the respective issue trackers.
-
-### Selenium 2
-
-No longer supported.
-
-### Selenium 3
-
-1.  [Selenium 3 NewSession does not implement the W3C-specified parameters](https://github.com/SeleniumHQ/selenium/issues/2827).
 
 ### Geckodriver (Standalone)
 
@@ -114,7 +104,7 @@ Patches are encouraged through GitHub pull requests. Please ensure that:
 
 See [the issue tracker][issues] for features that need implementing.
 
-[issues]: https://github.com/tebeka/selenium/issues
+[issues]: https://github.com/TelefonicaTC2Tech/selenium/issues
 
 ### Testing Locally
 
@@ -129,7 +119,7 @@ Run the tests:
 *   There is one top-level test for each of:
 
     1.  Chromium and ChromeDriver.
-    2.  A new version of Firefox and Selenium 3.
+    2.  A new version of Firefox and Selenium 4.
     3.  HTMLUnit, a Java-based lightweight headless browser implementation.
     4.  A new version of Firefox directly against Geckodriver.
 
@@ -137,7 +127,7 @@ Run the tests:
 
 *   To run only one of the top-level tests, pass one of:
 
-    *   `-test.run=TestFirefoxSelenium3`,
+    *   `-test.run=TestFirefoxSelenium4`,
     *   `-test.run=TestFirefoxGeckoDriver`,
     *   `-test.run=TestHTMLUnit`, or
     *   `-test.run=TestChrome`.
@@ -196,4 +186,4 @@ Test results can be viewed through the
 
 This project is licensed under the [MIT][mit] license.
 
-[mit]: https://raw.githubusercontent.com/tebeka/selenium/master/LICENSE
+[mit]: https://raw.githubusercontent.com/TelefonicaTC2Tech/selenium/master/LICENSE
