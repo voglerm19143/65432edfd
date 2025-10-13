@@ -5,7 +5,7 @@ import (
 
 	"github.com/TelefonicaTC2Tech/selenium/chrome"
 	"github.com/TelefonicaTC2Tech/selenium/firefox"
-	"github.com/TelefonicaTC2Tech/selenium/log"
+	driver "github.com/TelefonicaTC2Tech/selenium/driver"
 )
 
 // TODO(minusnine): make an enum type called FindMethod.
@@ -111,17 +111,17 @@ func (c Capabilities) AddProxy(p Proxy) {
 }
 
 // AddLogging adds logging configuration to the capabilities.
-func (c Capabilities) AddLogging(l log.Capabilities) {
-	c[log.CapabilitiesKey] = l
+func (c Capabilities) AddLogging(l driver.Capabilities) {
+	c[driver.CapabilitiesKey] = l
 }
 
 // SetLogLevel sets the logging level of a component. It is a shortcut for
-// passing a log.Capabilities instance to AddLogging.
-func (c Capabilities) SetLogLevel(typ log.Type, level log.Level) {
-	if _, ok := c[log.CapabilitiesKey]; !ok {
-		c[log.CapabilitiesKey] = make(log.Capabilities)
+// passing a driver.Capabilities instance to AddLogging.
+func (c Capabilities) SetLogLevel(typ driver.Type, level driver.Level) {
+	if _, ok := c[driver.CapabilitiesKey]; !ok {
+		c[driver.CapabilitiesKey] = make(driver.Capabilities)
 	}
-	m := c[log.CapabilitiesKey].(log.Capabilities)
+	m := c[driver.CapabilitiesKey].(driver.Capabilities)
 	m[typ] = level
 }
 
@@ -400,7 +400,7 @@ type WebDriver interface {
 	// capabilities.
 	//
 	// NOTE: will return an error (not implemented) on IE11 or Edge drivers.
-	Log(typ log.Type) ([]log.Message, error)
+	Log(typ driver.Type) ([]driver.Message, error)
 
 	// DismissAlert dismisses current alert.
 	DismissAlert() error

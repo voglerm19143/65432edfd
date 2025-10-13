@@ -1,6 +1,3 @@
-// Remote Selenium client implementation.
-// See https://www.w3.org/TR/webdriver for the protocol.
-
 package selenium
 
 import (
@@ -19,6 +16,7 @@ import (
 
 	"github.com/TelefonicaTC2Tech/selenium/chrome"
 	"github.com/TelefonicaTC2Tech/selenium/firefox"
+	driver "github.com/TelefonicaTC2Tech/selenium/driver"
 	"github.com/TelefonicaTC2Tech/selenium/log"
 	"github.com/blang/semver"
 )
@@ -144,7 +142,7 @@ func (e *Error) Error() string {
 
 // executeCommand realiza una solicitud HTTP y maneja la respuesta, priorizando W3C.
 func executeCommand(method, url string, data []byte) (json.RawMessage, error) {
-	debugLog("-> %s %s\n%s", method, filteredURL(url), data)
+	log.Logger.Debug().Str("method", method).Str("url", filteredURL(url)).RawJSON("data", data).Msg("Request")
 	request, err := newRequest(method, url, data)
 	if err != nil {
 		return nil, err
@@ -157,16 +155,7 @@ func executeCommand(method, url string, data []byte) (json.RawMessage, error) {
 	defer response.Body.Close()
 
 	buf, err := ioutil.ReadAll(response.Body)
-	if debugFlag {
-		if err == nil {
-			// Pretty print the JSON response
-			var prettyBuf bytes.Buffer
-			if err = json.Indent(&prettyBuf, buf, "", "    "); err == nil && prettyBuf.Len() > 0 {
-				buf = prettyBuf.Bytes()
-			}
-		}
-		debugLog("<- %s [%s]\n%s", response.Status, response.Header["Content-Type"], buf)
-	}
+	log.Logger.Debug().Str("status", response.Status).Interface("content-type", response.Header["Content-Type"]).RawJSON("body", buf).Msg("Response")
 	if err != nil {
 		return nil, errors.New(response.Status)
 	}
@@ -531,7 +520,7 @@ func (wd *remoteWD) NewSession() (string, error) {
 			}
 			v, err := parseVersion(s)
 			if err != nil {
-				debugLog("error parsing version: %v\n", err)
+				log.Logger.Warn().Err(err).Msg("Error parsing version")
 				continue
 			}
 			wd.browserVersion = v
@@ -1355,9 +1344,9 @@ func (wd *remoteWD) Wait(condition Condition) error {
 	return wd.WaitWithTimeoutAndInterval(condition, DefaultWaitTimeout, DefaultWaitInterval)
 }
 
-func (wd *remoteWD) Log(typ log.Type) ([]log.Message, error) {
+func (wd *remoteWD) Log(typ driver.Type) ([]driver.Message, error) {
 	url := wd.requestURL("/session/%s/log", wd.id)
-	params := map[string]log.Type{
+	params := map[string]driver.Type{
 		"type": typ,
 	}
 	data, err := json.Marshal(params)
@@ -1380,13 +1369,13 @@ func (wd *remoteWD) Log(typ log.Type) ([]log.Message, error) {
 		return nil, err
 	}
 
-	val := make([]log.Message, len(c.Value))
+	val := make([]driver.Message, len(c.Value))
 	for i, v := range c.Value {
-		val[i] = log.Message{
+		val[i] = driver.Message{
 			// n.b.: Chrome, which is the only browser that supports this API,
 			// supplies timestamps in milliseconds since the Epoch.
 			Timestamp: time.Unix(0, v.Timestamp*int64(time.Millisecond)),
-			Level:     log.Level(v.Level),
+			Level:     driver.Level(v.Level),
 			Message:   v.Message,
 		}
 	}
@@ -1758,7 +1747,7 @@ func (e *Error) Error() string {
 
 // executeCommand realiza una solicitud HTTP y maneja la respuesta, priorizando W3C.
 func executeCommand(method, url string, data []byte) (json.RawMessage, error) {
-	debugLog("-> %s %s\n%s", method, filteredURL(url), data)
+	log.Logger.Debug().Str("method", method).Str("url", filteredURL(url)).RawJSON("data", data).Msg("Request")
 	request, err := newRequest(method, url, data)
 	if err != nil {
 		return nil, err
@@ -1771,16 +1760,7 @@ func executeCommand(method, url string, data []byte) (json.RawMessage, error) {
 	defer response.Body.Close()
 
 	buf, err := ioutil.ReadAll(response.Body)
-	if debugFlag {
-		if err == nil {
-			// Pretty print the JSON response
-			var prettyBuf bytes.Buffer
-			if err = json.Indent(&prettyBuf, buf, "", "    "); err == nil && prettyBuf.Len() > 0 {
-				buf = prettyBuf.Bytes()
-			}
-		}
-		debugLog("<- %s [%s]\n%s", response.Status, response.Header["Content-Type"], buf)
-	}
+	log.Logger.Debug().Str("status", response.Status).Interface("content-type", response.Header["Content-Type"]).RawJSON("body", buf).Msg("Response")
 	if err != nil {
 		return nil, errors.New(response.Status)
 	}
@@ -2145,7 +2125,7 @@ func (wd *remoteWD) NewSession() (string, error) {
 			}
 			v, err := parseVersion(s)
 			if err != nil {
-				debugLog("error parsing version: %v\n", err)
+				log.Logger.Warn().Err(err).Msg("Error parsing version")
 				continue
 			}
 			wd.browserVersion = v
